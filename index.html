@@ -1,1 +1,106 @@
-hello
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>魔法陣(奇数)</title>
+    <style>
+      body {
+          background: #eeeeee;
+      }
+      div {
+          background: #ffffff;
+          width: 800px;
+          padding: 10px;
+          text-align: center;
+          margin: 30px auto;
+      }
+      table {
+          margin-left: auto;
+          margin-right: auto;
+      }
+      td {
+          width: 40px;
+          height: 40px;
+          border: 1px solid #cccccc;
+          text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>&#x2618;魔法陣(奇数)</h1>
+      <p>
+        Input Number => <input type="text"></input>
+      </p>
+      <table id="magic">
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+    <script>
+      // 問題文とは仮引数を変更
+      function shokika(houjin) {
+          var n = houjin.length - 1;
+          for (let y = 1; y <= n; y++) {
+              for (let x = 1; x <= n; x++) {
+                  houjin[y][x] = 0
+              }
+          }
+      }
+
+      function mahoujin(houjin) {
+          var n = houjin.length - 1;
+          var y = n;
+          var x = (n + 1) / 2;
+          var suuji = 1;
+          houjin[y][x] = suuji;
+          while (suuji < n * n) {
+              var yb = y;
+              var xb = x;
+
+              y = y + 1;
+              x = x + 1;
+              if (y > n) {
+                  y = 1;
+              }
+              if (x > n) {
+                  x = 1;
+              }
+              if (houjin[y][x] != 0) {
+                  y = yb - 1;
+                  x = xb;
+              }
+
+              suuji = suuji + 1;
+              houjin[y][x] = suuji;
+          }
+      }
+      
+      $(function() {
+          $("input").keypress(function(e) {
+              if (e.which == 13) {
+                  var n = parseInt($("input").val(), 10);
+                  var houjin = new Array(n+1);
+                  for (let i = 0; i < n+1; i++) {
+                      houjin[i] = new Array(n+1);
+                  }
+                  shokika(houjin);
+                  mahoujin(houjin);
+                  var el = $('#magic > tbody');
+                  el.empty();
+                  for (let i = 1; i <= n; i++) {
+                      var tr = $('<tr>');
+                      for (let j = 1; j <= n; j++) {
+                          var td = $('<td>').text(houjin[i][j]);
+                          tr.append(td);
+                      }
+                      el.append(tr);
+                  }
+                  return false;
+              }
+          });
+      });
+      </script>
+  </body>
+</html>
